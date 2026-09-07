@@ -1,3 +1,4 @@
 ###on your rdp you need to create a folder called as terraform-project. 
   #then open visual studio code click on file click on folder select the folder from your desktop
   #again click on file enable autosave option
+#create two file provider.tf and resources.tf
