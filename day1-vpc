@@ -31,3 +31,8 @@ resource "aws_vpc" "main" {
 ###lets open the terminal
 terraform init
 ###this will download the plugin 
+terraform validate
+terraform fmt
+terraform plan
+terraform apply
+###once apply complete go to aws console in vpc you can see your vpc
