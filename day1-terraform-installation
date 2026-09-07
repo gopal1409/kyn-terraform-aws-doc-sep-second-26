@@ -5,6 +5,6 @@
   refreshenv
   choco install git
   choco install terraform
-  choco install aws-cli
+  choco install awscli
   choco install vscode
   ###how to verify 
