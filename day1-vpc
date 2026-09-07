@@ -2,3 +2,32 @@
   #then open visual studio code click on file click on folder select the folder from your desktop
   #again click on file enable autosave option
 #create two file provider.tf and resources.tf
+#inside the provider.tf add this code copy from line 7 till 19
+#lets add the provider aws 
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 6.0" #version is required for backward compatibility and to avoid breaking changes in future versions
+    }
+  }
+}
+
+# Configure the AWS Provider
+provider "aws" {
+  region = "us-east-1"
+}
+
+###lets create the vpc also inside vpc-resource.tf file copy line 23 till 29 change my name to your name
+
+resource "aws_vpc" "main" {
+ 
+  cidr_block = "10.0.0.0/16"
+  tags = {
+    Name = "Gopal-vpc"
+  }
+}
+
+###lets open the terminal
+terraform init
+###this will download the plugin 
