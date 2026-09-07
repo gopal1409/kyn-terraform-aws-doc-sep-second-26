@@ -1,0 +1,216 @@
+2026-09-07 09:59:51 From Gopal Das to Everyone:
+	https://github.com/gopal1409/aws-documentation-terraform
+	
+2026-09-07 10:03:32 From Vinod to Everyone:
+	4
+	
+2026-09-07 10:03:46 From Varunkumar K S to Everyone:
+	4
+	
+2026-09-07 10:04:17 From SRaviKanthReddy to Everyone:
+	5
+	
+2026-09-07 10:07:13 From Gopal Das to Everyone:
+	https://docs.google.com/spreadsheets/d/1NKwNuVXVWC1DlIkFFMdOCWPJtTu3iHDzPRXSkgwPuQw/edit?usp=sharing
+	
+2026-09-07 10:11:24 From Gopal Das to Everyone:
+	https://docs.google.com/spreadsheets/d/1NKwNuVXVWC1DlIkFFMdOCWPJtTu3iHDzPRXSkgwPuQw/edit?usp=sharing
+	
+2026-09-07 10:13:31 From Naveen to Everyone:
+	9
+	
+2026-09-07 10:13:38 From Naveen to Everyone:
+	i am able to login
+	
+2026-09-07 10:14:44 From Varunkumar K S to Everyone:
+	I have logged in
+	
+2026-09-07 10:17:37 From Gopal Das to Everyone:
+	https://docs.google.com/spreadsheets/d/1NKwNuVXVWC1DlIkFFMdOCWPJtTu3iHDzPRXSkgwPuQw/edit?usp=sharing
+	
+2026-09-07 10:20:42 From Gopal Das to Everyone:
+	https://docs.google.com/spreadsheets/d/1NKwNuVXVWC1DlIkFFMdOCWPJtTu3iHDzPRXSkgwPuQw/edit?usp=sharing
+	
+2026-09-07 10:39:14 From Gopal Das to Everyone:
+	10.0.0.0/16
+	
+2026-09-07 10:39:47 From Joydeepta (Joy) to Everyone:
+	done
+	
+2026-09-07 10:39:54 From SRaviKanthReddy to Everyone:
+	done
+	
+2026-09-07 10:39:58 From ShaikKhamar to Everyone:
+	done
+	
+2026-09-07 10:40:23 From Ayushman Arora to Everyone:
+	done
+	
+2026-09-07 10:40:48 From Varunkumar K S to Everyone:
+	done
+	
+2026-09-07 10:40:51 From Karthik S Morajkar to Everyone:
+	done
+	
+2026-09-07 10:41:35 From Naveen to Everyone:
+	done
+	
+2026-09-07 10:46:14 From Gopal Das to Everyone:
+	app-subnet=10.0.1.0/24
+	
+2026-09-07 10:46:25 From Gopal Das to Everyone:
+	db-subnet=10.0.2.0/24
+	
+2026-09-07 10:47:22 From Ayushman Arora to Everyone:
+	done
+	
+2026-09-07 10:47:38 From SRaviKanthReddy to Everyone:
+	done
+	
+2026-09-07 10:47:40 From Naveen to Everyone:
+	done
+	
+2026-09-07 10:47:58 From Varunkumar K S to Everyone:
+	done
+	
+2026-09-07 10:48:29 From Joydeepta (Joy) to Everyone:
+	done
+	
+2026-09-07 10:52:59 From Naveen to Everyone:
+	done
+	
+2026-09-07 10:54:04 From Gopal Das to Everyone:
+	rtb
+	
+2026-09-07 10:54:08 From SRaviKanthReddy to Everyone:
+	done
+	
+2026-09-07 10:54:11 From Naveen to Everyone:
+	done
+	
+2026-09-07 10:54:14 From Joydeepta (Joy) to Everyone:
+	done
+	
+2026-09-07 10:54:15 From Varunkumar K S to Everyone:
+	done
+	
+2026-09-07 10:54:16 From ShaikKhamar to Everyone:
+	done
+	
+2026-09-07 11:07:46 From Gopal Das to Everyone:
+	ig
+	
+2026-09-07 11:07:56 From SRaviKanthReddy to Everyone:
+	done
+	
+2026-09-07 11:07:55 From Varunkumar K S to Everyone:
+	done
+	
+2026-09-07 11:07:57 From Joydeepta (Joy) to Everyone:
+	done
+	
+2026-09-07 11:08:02 From Ayushman Arora to Everyone:
+	done
+	
+2026-09-07 11:08:09 From Naveen to Everyone:
+	done
+	
+2026-09-07 11:12:20 From Ayushman Arora to Everyone:
+	done
+	
+2026-09-07 11:12:16 From Varunkumar K S to Everyone:
+	done
+	
+2026-09-07 11:13:07 From SRaviKanthReddy to Everyone:
+	done
+	
+2026-09-07 11:13:14 From Joydeepta (Joy) to Everyone:
+	done
+	
+2026-09-07 11:13:56 From Naveen to Everyone:
+	done
+	
+2026-09-07 11:14:42 From Gopal Das to Everyone:
+	11:30
+	
+2026-09-07 11:33:35 From Joydeepta (Joy) to Everyone:
+	bck
+	
+2026-09-07 11:33:41 From ShaikKhamar to Everyone:
+	back
+	
+2026-09-07 11:34:01 From Naveen to Everyone:
+	back
+	
+2026-09-07 11:36:15 From Varunkumar K S to Everyone:
+	Vinod will join back, he have joined one P1 call.
+	
+2026-09-07 11:36:35 From Gopal Das to Everyone:
+	https://github.com/gopal1409/kyn-terraform-aws-doc-sep-second-26
+	
+2026-09-07 11:46:31 From Joydeepta (Joy) to Everyone:
+	done
+	
+2026-09-07 11:47:29 From Gopal Das to Everyone:
+	ping google.com
+	
+2026-09-07 13:05:59 From Gopal Das to Everyone:
+	1:10 lunch
+	
+2026-09-07 13:06:09 From Gopal Das to Everyone:
+	2:10 lunch
+	
+2026-09-07 14:13:49 From Karthik S Morajkar to Everyone:
+	yes
+	
+2026-09-07 14:15:44 From Joydeepta (Joy) to Everyone:
+	back
+	
+2026-09-07 14:50:48 From ShaikKhamar to Everyone:
+	done
+	
+2026-09-07 14:54:33 From Gopal Das to Everyone:
+	https://github.com/gopal1409/kyn-terraform-aws-doc-sep-second-26/blob/main/day1-terraform-installation
+	
+2026-09-07 15:02:44 From Varunkumar K S to Everyone:
+	done
+	
+2026-09-07 15:02:48 From ShaikKhamar to Everyone:
+	done
+	
+2026-09-07 15:02:51 From Vinod to Everyone:
+	Done
+	
+2026-09-07 15:03:57 From Joydeepta (Joy) to Everyone:
+	done
+	
+2026-09-07 15:04:12 From SRaviKanthReddy to Everyone:
+	done
+	
+2026-09-07 15:06:37 From Naveen to Everyone:
+	completed
+	
+2026-09-07 15:07:06 From Ayushman Arora to Everyone:
+	done
+	
+2026-09-07 15:16:14 From Gopal Das to Everyone:
+	aws configure
+	
+2026-09-07 16:31:01 From Gopal Das to Everyone:
+	https://github.com/gopal1409/kyn-terraform-aws-doc-sep-second-26/blob/main/day1-vpc
+	
+2026-09-07 16:40:36 From Gopal Das to Everyone:
+	https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc.html
+	
+2026-09-07 16:41:04 From Gopal Das to Everyone:
+	https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc.html
+	
+2026-09-07 16:42:53 From Gopal Das to Everyone:
+	https://github.com/gopal1409/kyn-terraform-aws-doc-sep-second-26/blob/main/day1-vpc
+	
+2026-09-07 17:02:34 From Gopal Das to Everyone:
+	terraform destroy
+	
+2026-09-07 17:09:09 From Gopal Das to Everyone:
+	kyn-terraform-aws-sept-second-week26
+	
