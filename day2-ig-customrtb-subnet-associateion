@@ -1,0 +1,44 @@
+##create a file igw.tf copy line 2 till 13
+  resource "aws_internet_gateway" "igw" {
+  vpc_id = aws_vpc.my_vpc.id  #from where we will get the vpc id
+
+   tags = {
+    Name = "${local.project_tags.Name}-igw"
+   
+  }
+}
+
+output "igw_id" {
+  value = aws_internet_gateway.igw.id
+}
+
+##create another file custom-rtb.tf copy line 16 till 38
+  resource "aws_route_table" "custom_rtb" {
+  vpc_id = aws_vpc.my_vpc.id
+
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.igw.id
+  }
+
+
+
+    tags = {
+    Name = "${local.project_tags.Name}-rtb"
+   
+  }
+}
+
+#once we create the route table we need to associate it with the subnet so that the subnet can use this route table to send traffic to internet gateway
+resource "aws_route_table_association" "custom_rtb_association" {
+  for_each = aws_subnet.web_subnet #this contains all the ids inside my state file
+  subnet_id      = each.value.id
+  route_table_id = aws_route_table.custom_rtb.id
+  
+}
+
+#do terraform apply
+  1. go into internet gw you will see ig will be created with your name
+  2. go to custom rtb you will get a new customrtb with your name 
+  3. in custom rtb click on routes you will see your ig attached
+  4. in custom rtb click on subnet-association you will see all your three subnet are attached
