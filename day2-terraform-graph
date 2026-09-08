@@ -1,0 +1,5 @@
+##in your terminal run a command
+  terraform graph
+  ###whatever output you will get copy every thing
+  #then in a new tab in the browser open the site delete everything and paste the output 
+  https://dreampuf.github.io/GraphvizOnline/
