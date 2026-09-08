@@ -51,3 +51,34 @@ terraform plan
 ###plan should show you you are creating three different subnet 
 terraform apply
 ###go to aws vpc check three subnet is created or not
+###we need to provide unique name to the subnet
+##go to generic-varaibles.tf file add this two varaibles at the end copy line 56 till 66 and change my name to your name 
+variable "project_name" {
+  description = "Project name for tagging"
+  type = string
+  default = "gopal-project"
+}
+
+variable "environment" {
+  description = "Environment name for tagging"
+  type = string
+  default = "dev"
+}
+
+#then create a local.tf file copy from line 69 till 76
+locals {
+    project_tags = { #it is the name of the local variable which is user defined
+        Name = "${var.project_name}-${var.environment}"
+        # "gopal-project"-dev
+        Project     = var.project_name
+        Environment = var.environment
+    }
+}
+
+#################then inside subnet-resource.tf delete the tags block and add this block
+tags = {
+    Name = "${local.project_tags.Name}-${each.key}"
+   
+  }
+
+###terraform apply then go to aws console see your subnet will have a meaning full name 
