@@ -1,0 +1,63 @@
+#lets try to undestand input and output varaibles in terraform 
+  #first do terraform destroy
+  #create a file generic-varaibles.tf copy line 3 till 25
+  variable "aws_region" {
+  description = "aws region where resoure are created"
+  type = string
+  default = "us-east-1"
+}
+
+variable "vpc_name" {
+  description = "aws vpc name where resoure are created"
+  type = string
+  default = "gopal-vpc"
+}
+
+variable "subnet_name" {
+  description = "aws subnet name where resoure are created"
+  type = string
+  default = "gopal-subnet"
+}
+
+variable "subnet_cidr" {
+  description = "aws subnet CIDR block where resoure are created"
+  type = string
+  default = "10.0.1.0/24"
+}
+
+###lets use this varibles inside vpc-resource.tf delete everything and add this line from 29 till 36
+  resource "aws_vpc" "my_vpc" {
+ #resource what resource we are create an aws_vpc
+#this my_vpc is kind of refrence block which is user defined
+  cidr_block = "10.0.0.0/16"
+  tags = {
+    Name = var.vpc_name
+  }
+}
+####lets modify subnet-resource.tf delete everytthing and add this line from 38 till 45
+  resource "aws_subnet" "web_subnet" {
+  vpc_id     = aws_vpc.my_vpc.id #it will read it from state file
+  cidr_block = var.subnet_cidr
+
+  tags = {
+    Name = var.subnet_name
+  }
+}
+
+##create a new file network-output.tf add line 48 till 54
+  output "vpc_id" {
+  value = aws_vpc.my_vpc.id
+}
+
+output "subnet_id" {
+  value = aws_subnet.web_subnet.id
+}
+
+##finaly do terraform apply 
+  ###in the output you will see vpc id and subnet id no need to go to aws to verify the same. 
+
+  1. in generic-varaibles.tf file we declare the varaibles how we are calling inside vpc-resources.tf provide the syntax in chat
+  2. in generic-varaibles.tf file we declare the varaibles how we are calling inside subnet-resources.tf provide the syntax in chat
+  3. in network-output.tf file we create output block {aws_vpc.my_vpc.id} -which file is terraform reading to get the output
+
+  
