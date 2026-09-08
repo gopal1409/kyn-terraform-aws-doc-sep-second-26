@@ -1,0 +1,53 @@
+##create a new file subnet-object.tf copy from line 2 till 25
+  variable "subnets" {
+  type = map(object({
+    cidr_block = string
+    availability_zone = string
+    subnet_type = string 
+  }))
+  default = {
+    subnet1 = {
+      cidr_block = "10.0.1.0/24"
+      availability_zone = "us-east-1a"
+      subnet_type = "public"
+    }
+    subnet2 = {
+      cidr_block = "10.0.2.0/24"
+      availability_zone = "us-east-1b"
+      subnet_type = "public"
+    }
+    subnet3 = {
+      cidr_block = "10.0.3.0/24"
+      availability_zone = "us-east-1c"
+      subnet_type = "public"
+    }
+  }
+}
+###go to subnet-resource.tf delete everything and add line 27 till 37
+resource "aws_subnet" "web_subnet" {
+  for_each = var.subnets #it contains what varaibles subnet 123
+  vpc_id     = aws_vpc.my_vpc.id #it will read it from state file
+  cidr_block = each.value.cidr_block
+  availability_zone = each.value.availability_zone
+  #map_public_ip_on_launch = true
+  tags = {
+    Name = each.key
+    Type = each.value.subnet_type
+  }
+}
+
+#inside network-output.tf delete everything add line 40 till 46
+output "vpc_id" {
+  value = aws_vpc.my_vpc.id
+}
+/*
+output "subnet_id" {
+  value = aws_subnet.web_subnet.id
+}*/
+
+###first destroy the resources 
+terraform destroy
+terraform plan
+###plan should show you you are creating three different subnet 
+terraform apply
+###go to aws vpc check three subnet is created or not
