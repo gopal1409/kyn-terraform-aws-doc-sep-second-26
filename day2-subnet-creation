@@ -1,0 +1,12 @@
+##create a new file called as subnet-resource.tf change my name to your name copy from line 2 to 9
+  resource "aws_subnet" "web_subnet" {
+  vpc_id     = aws_vpc.my_vpc.id #it will read it from state file
+  cidr_block = "10.0.1.0/24"
+
+  tags = {
+    Name = "gopal-subnet"
+  }
+}
+
+#then do terraform apply 
+  ##once created your can go to subnet and can see the same
