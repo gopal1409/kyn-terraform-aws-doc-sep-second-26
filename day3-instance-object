@@ -1,0 +1,70 @@
+##first do terraform destory --auto-approve
+##create a new file instance-object.tf copy line 2 till 27
+  variable "instance" {
+  description = "ec2 instance to be created"
+  type = map(object({
+    instance_type = string
+    availability_zone = string
+    subnet_key = string #subnet key is an predefined varaibles in terrafrom which collect all the subnet you have created from the state file 
+  }))
+  default = {
+    web1 = {
+      instance_type = "t3.micro"
+      availability_zone = "us-east-1a"
+      subnet_key = "subnet1"
+    }
+    web2 = {
+      instance_type = "t3.small"
+      availability_zone = "us-east-1b"
+      subnet_key = "subnet2"
+    }
+    web3 = {
+      instance_type = "t3.medium"
+      availability_zone = "us-east-1c"
+      subnet_key = "subnet3"
+    }
+  }
+}
+
+#lets modifu the vm.tf file delete all the content inside your vm.tf file and paste this from line 30 till 64
+  resource "aws_instance" "web_vm"{
+    for_each = var.instance
+  ami           = data.aws_ami.ubuntu.id
+  instance_type = each.value.instance_type #t2 micro instance
+  subnet_id = aws_subnet.web_subnet[each.value.subnet_key].id #this is where we are geeting private ip of the instance
+  vpc_security_group_ids = [aws_security_group.web_sg.id]
+  associate_public_ip_address = true
+  user_data = file("${path.module}/app.sh")
+   # user_data = file(C:\Users\gopal\OneDrive\Desktop\terraform-project\app.sh)
+
+  #path.module is an meta argument in terraform this will look for a file in current directory
+
+
+  tags = {
+    Name = "${local.project_tags.Name}-${each.key}"
+    Project = var.project_name
+    Environment = var.environment
+   
+  }
+}
+
+output "instance_details" {
+    description = "details of the instance"
+    value = { 
+        for key, instance in aws_instance.web_vm :
+        key => {
+            instance_id = instance.id
+            instance_type = instance.instance_type
+            availabiltiy_zone = instance.availability_zone
+            subnet_id = instance.subnet_id 
+            private_ip = instance.private_ip
+            public_ip = instance.public_ip
+        }
+    }
+}
+
+####apply it using terraform apply
+  1. go to aws console check there are three instance is create they should be in different az also the size of the instance will be different
+  2. all the instance public ip is visible copy every single public ip paste it in the browser 
+  ##########finally again do terraform destroy
+
