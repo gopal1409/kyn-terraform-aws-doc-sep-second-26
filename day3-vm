@@ -1,0 +1,84 @@
+##create a file app.sh copy from line 2 till 55
+#!/bin/bash
+
+# Update packages
+apt-get update -y
+
+# Install nginx
+apt-get install nginx -y
+
+# Get the hostname of the EC2 instance
+HOSTNAME=$(hostname)
+
+# Get the private IP address
+PRIVATE_IP=$(hostname -I | awk '{print $1}')
+
+# Get the operating system information
+OS_NAME=$(lsb_release -ds)
+
+# Create custom web page
+cat <<EOF > /var/www/html/index.html
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Terraform AWS Demo</title>
+</head>
+
+<body>
+
+    <h1>Hello from Terraform!</h1>
+
+    <h2>Ubuntu EC2 + Nginx</h2>
+
+    <p><strong>Server deployed using Terraform.</strong></p>
+
+    <hr>
+
+    <h3>Server Information</h3>
+
+    <p><strong>Hostname:</strong> $HOSTNAME</p>
+
+    <p><strong>Private IP:</strong> $PRIVATE_IP</p>
+
+    <p><strong>Operating System:</strong> $OS_NAME</p>
+
+    <p><strong>Web Server:</strong> Nginx</p>
+
+</body>
+</html>
+EOF
+
+# Enable nginx at boot
+systemctl enable nginx
+
+# Start/restart nginx
+systemctl restart nginx
+
+#lets create the vm.tf file copy from line number 58 till 84
+resource "aws_instance" "web_vm"{
+  ami           = data.aws_ami.ubuntu.id
+  instance_type = "t3.medium"
+  subnet_id = aws_subnet.web_subnet["subnet1"].id #this is where we are geeting private ip of the instance
+  vpc_security_group_ids = [aws_security_group.web_sg.id]
+  associate_public_ip_address = true
+  user_data = file("${path.module}/app.sh")
+   # user_data = file(C:\Users\gopal\OneDrive\Desktop\terraform-project\app.sh)
+
+  #path.module is an meta argument in terraform this will look for a file in current directory
+
+
+  tags = {
+    Name = "${local.project_tags.Name}-web-server"
+    Project = var.project_name
+    Environment = var.environment
+   
+  }
+}
+
+output "publicip" {
+    value = aws_instance.web_vm.public_ip
+}
+
+output "publicdns" {
+    value = aws_instance.web_vm.public_dns
+}
