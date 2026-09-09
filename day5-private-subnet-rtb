@@ -1,0 +1,60 @@
+##create a new file private-subnet-object.tf copy from line 2 till 25
+  variable "private_subnets" {
+  type = map(object({
+    cidr_block = string
+    availability_zone = string
+    subnet_type = string 
+  }))
+  default = {
+    subnet4 = {
+      cidr_block = "10.0.4.0/24"
+      availability_zone = "us-east-1a"
+      subnet_type = "private"
+    }
+    subnet5 = {
+      cidr_block = "10.0.5.0/24"
+      availability_zone = "us-east-1b"
+      subnet_type = "private"
+    }
+    subnet6 = {
+      cidr_block = "10.0.6.0/24"
+      availability_zone = "us-east-1c"
+      subnet_type = "private"
+    }
+  }
+}
+
+#lets create another file private-subnbet.tf copy from line 28 till 38
+  resource "aws_subnet" "db_subnet" {
+  for_each = var.private_subnets #it contains what varaibles subnet 123
+  vpc_id     = aws_vpc.my_vpc.id #it will read it from state file
+  cidr_block = each.value.cidr_block
+  availability_zone = each.value.availability_zone
+  #map_public_ip_on_launch = true
+  tags = {
+    Name = "${local.project_tags.Name}-${each.key}"
+   
+  }
+}
+
+#lets create the route table for rtb-private-subnet.tf copy line 42 till 60
+
+  resource "aws_route_table" "private_rtb" {
+  vpc_id = aws_vpc.my_vpc.id
+
+  
+
+
+    tags = {
+    Name = "${local.project_tags.Name}-private-rtb"
+   
+  }
+}
+
+#once we create the route table we need to associate it with the subnet so that the subnet can use this route table to send traffic to internet gateway
+resource "aws_route_table_association" "private_rtb_association" {
+  for_each = aws_subnet.db_subnet #this contains all the ids inside my state file
+  subnet_id      = each.value.id
+  route_table_id = aws_route_table.private_rtb.id
+  
+}
