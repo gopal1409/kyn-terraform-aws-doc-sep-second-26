@@ -1,0 +1,4 @@
+##lets create some git global variables
+  git config --global user.name "gopal"
+  git config --global user.email "gopal1409@gmail.com"
+  git config --global --list
