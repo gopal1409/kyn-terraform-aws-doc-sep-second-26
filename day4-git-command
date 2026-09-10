@@ -29,3 +29,13 @@ rm -rf .git
 git status
 ####now git is not tracking your file as we have deleted the git folder
 
+#lets do our first commit as we have deleted the git folder we need to reintialzed it
+git init
+git add calcy.py
+git commit -m "started working on calcy application"
+#this will show that calcy.py file is not thre
+git status
+#ls will show the file is there
+ls
+#git log will show your first commit
+git log
