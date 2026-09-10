@@ -70,4 +70,6 @@ git push origin main
   565  git checkout main
   566  cat calcy.py
   567  git branch
-
+#push it to remote also
+git push origin subtract
+#once you push it go to github
