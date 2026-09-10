@@ -39,3 +39,15 @@ git status
 ls
 #git log will show your first commit
 git log
+#lets modify the calcy.py file and add another line and push to remote
+echo "we want to add another function in calcy" >> calcy.py
+#git status will compare what code you have previously and what addtion your are doing
+git status
+cat calcy.py
+git add calcy.py
+git commit -m "added a new line"
+#this will show there another commit
+git log
+#lets push the changes to remote repo 
+git push origin main
+#once you push the change to remote repo refresh github you will see 2 line
