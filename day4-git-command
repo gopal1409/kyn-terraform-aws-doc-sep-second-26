@@ -2,3 +2,30 @@
   git config --global user.name "gopal"
   git config --global user.email "gopal1409@gmail.com"
   git config --global --list
+
+##git init this will intilized the current directory
+mkdir projectx
+cd projectx/
+#lets create some blank file inside the directory 
+touch DS_Store
+touch auth
+touch secret
+touch calcy.py
+echo "we are going to create a calcy app" > calcy.py
+cat calcy.py
+#git status will show that this is not an git repo
+git status
+#to initialized this repo as git repo git init
+git init
+git status
+
+
+ls -la
+#this will show an .git folder this is the folder where git store your versioing
+ls .git
+#if you delete teh .git folder you loose all your versioing
+rm -rf .git
+##########################
+git status
+####now git is not tracking your file as we have deleted the git folder
+
