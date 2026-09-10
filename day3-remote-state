@@ -1,0 +1,23 @@
+#we need to delete some files and folder
+  .terraform
+  terraform.tfstate
+  terraform.tfstate.backup
+  .terraform lock file
+  ####once you delete it 
+  ##create a new file called as backend.tf copy from line 8 till 16 change the bucket name to your s3 bucket name
+  terraform {
+  backend "s3" {
+    bucket = "gopal-terraform-tfstate" #change it to your bucket name
+    key = "dev/terraform.tfstate" #inside s3 bucket it will create a folder dev and inside that it will store your tfstate file
+    region = "us-east-1"
+    encrypt = true
+    use_lockfile = true #the imp part is the lock file this will enable s3 state locking
+  }
+}
+
+#then do 
+  terraform init
+  terraform validate
+  terraform fmt 
+  terraform plan
+  terraform apply
