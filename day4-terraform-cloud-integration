@@ -1,0 +1,12 @@
+##crete a new file in vs code .gitignore copy line 2 till 4
+  .terraform
+  terraform.tfstate
+  terraform.tfstate.backup
+  ##in the terminal 
+  git init
+  git add .
+  git commit -m "terraform project"
+  ###create a new repo in your personal github by clicking on the plus give the name as terraform-cloud-integration
+  #then select ssh in quick setup
+  ##copy the push command and paste it in the terminal
+  ####this will push your code to remote repo
