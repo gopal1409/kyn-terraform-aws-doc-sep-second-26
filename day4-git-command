@@ -51,3 +51,23 @@ git log
 #lets push the changes to remote repo 
 git push origin main
 #once you push the change to remote repo refresh github you will see 2 line
+#branches in git
+550  git branch
+  551  git branch subtract
+  552  git branch
+  553  cat calcy.py
+  554  git checkout subtract
+  555  git branch
+  556  echo "adding subtract function"
+  557  cat calcy.py
+  558  echo "adding subtract function" >> calcy.py
+  559  cat calcy.py
+  560  git add calcy.py
+  561  git commit -m "added subtract function"
+  562  clear
+  563  cat calcy.py
+  564  git branch
+  565  git checkout main
+  566  cat calcy.py
+  567  git branch
+
