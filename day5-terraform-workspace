@@ -1,0 +1,159 @@
+##go to vpc-resource.tf file and delete everything add line 2 till 13
+variable "vpc_cidr" {
+  type = string
+  default = "10.0.0.0/16"
+}
+resource "aws_vpc" "my_vpc" {
+  #resource what resource we are create an aws_vpc
+  #this my_vpc is kind of refrence block which is user defined
+  cidr_block = var.vpc_cidr
+  tags = {
+    Name = var.vpc_name
+  }
+}
+#lets create dev.tfvars and provide the declare value copy from line 15 till 76 also change my name to your name
+  aws_region = "us-east-1"
+project_name = "gopal-project"
+vpc_name = "gopal-project-dev-vpc"
+subnet_name = "gopal-project-dev-subnet"
+vpc_cidr = "10.0.0.0/16"
+environment = "dev"
+#########this are public subnet
+subnets = {
+    subnet1 = {
+      cidr_block        = "10.0.1.0/24"
+      availability_zone = "us-east-1a"
+      subnet_type       = "public"
+    }
+    subnet2 = {
+      cidr_block        = "10.0.2.0/24"
+      availability_zone = "us-east-1b"
+      subnet_type       = "public"
+    }
+    subnet3 = {
+      cidr_block        = "10.0.3.0/24"
+      availability_zone = "us-east-1c"
+      subnet_type       = "public"
+    }
+  }
+
+  ######ths are private subnet
+  private_subnets = {
+    subnet4 = {
+      cidr_block        = "10.0.4.0/24"
+      availability_zone = "us-east-1a"
+      subnet_type       = "private"
+    }
+    subnet5 = {
+      cidr_block        = "10.0.5.0/24"
+      availability_zone = "us-east-1b"
+      subnet_type       = "private"
+    }
+    subnet6 = {
+      cidr_block        = "10.0.6.0/24"
+      availability_zone = "us-east-1c"
+      subnet_type       = "private"
+    }
+  }
+
+  #we need to declare the ec2 varaibles also 
+  instance = {
+    web1 = {
+      instance_type     = "t3.small"
+      availability_zone = "us-east-1a"
+      subnet_key        = "subnet1"
+    }
+    web2 = {
+      instance_type     = "t3.small"
+      availability_zone = "us-east-1b"
+      subnet_key        = "subnet2"
+    }
+    web3 = {
+      instance_type     = "t3.small"
+      availability_zone = "us-east-1c"
+      subnet_key        = "subnet3"
+    }
+  }
+  
+#lets create the prod.tfvars copy from line 79 till 140 also change my name to your name
+  aws_region = "us-east-1"
+project_name = "gopal-project"
+vpc_name = "gopal-project-prod-vpc"
+subnet_name = "gopal-project-prod-subnet"
+vpc_cidr = "172.0.0.0/16"
+environment = "prod"
+#########this are public subnet
+subnets = {
+    subnet1 = {
+      cidr_block        = "172.0.1.0/24"
+      availability_zone = "us-east-1a"
+      subnet_type       = "public"
+    }
+    subnet2 = {
+      cidr_block        = "172.0.2.0/24"
+      availability_zone = "us-east-1b"
+      subnet_type       = "public"
+    }
+    subnet3 = {
+      cidr_block        = "172.0.3.0/24"
+      availability_zone = "us-east-1c"
+      subnet_type       = "public"
+    }
+  }
+
+  ######ths are private subnet
+  private_subnets = {
+    subnet4 = {
+      cidr_block        = "172.0.4.0/24"
+      availability_zone = "us-east-1a"
+      subnet_type       = "private"
+    }
+    subnet5 = {
+      cidr_block        = "172.0.5.0/24"
+      availability_zone = "us-east-1b"
+      subnet_type       = "private"
+    }
+    subnet6 = {
+      cidr_block        = "172.0.6.0/24"
+      availability_zone = "us-east-1c"
+      subnet_type       = "private"
+    }
+  }
+
+  #we need to declare the ec2 varaibles also 
+  instance = {
+    web1 = {
+      instance_type     = "t3.medium"
+      availability_zone = "us-east-1a"
+      subnet_key        = "subnet1"
+    }
+    web2 = {
+      instance_type     = "t3.medium"
+      availability_zone = "us-east-1b"
+      subnet_key        = "subnet2"
+    }
+    web3 = {
+      instance_type     = "t3.medium"
+      availability_zone = "us-east-1c"
+      subnet_key        = "subnet3"
+    }
+  }
+
+#now lets create the workspace
+  #thsi will show all the command related to workspace
+terraform workspace                                                                                                  
+terraform workspace show                              
+  #this will create a workspace called as dev
+terraform workspace new dev                                                                                          
+terraform workspace show        
+  #to apply in dev workspace we will pass the dev.tfvars file using --var-file
+terraform apply --var-file=dev.tfvars                                                                                
+terraform workspace list                                                                                             
+terraform workspace new prod                                                                                         
+terraform workspace list                                                                                             
+terraform apply --var-file=prod.tfvars     
+  ##once both the workspace is created verify
+  1. Go to vpc you will see there are two vpc with your name prod and dev
+  2. go to ec2 instance you will see there are two type of instance prod and dev
+  3. go to load balancer you will see dev and prod lb
+
