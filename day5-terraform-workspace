@@ -156,4 +156,7 @@ terraform apply --var-file=prod.tfvars
   1. Go to vpc you will see there are two vpc with your name prod and dev
   2. go to ec2 instance you will see there are two type of instance prod and dev
   3. go to load balancer you will see dev and prod lb
-
+#lets destroy the resources. 
+terraform destroy --auto-approve
+terraform workspace select dev
+terraform destroy --auto-approve
