@@ -1,0 +1,132 @@
+##create a new folder in desktop terraform-module-call
+  ##inside the folder we will create the provider.tf copy from line 4 till 16
+  #lets add the provider aws 
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 6.0" #version is required for backward compatibility and to avoid breaking changes in future versions
+    }
+  }
+}
+
+# Configure the AWS Provider
+provider "aws" {
+  region = var.aws_region
+}
+
+#then lets create the varaibles.tf file copy from line number 19 till 66
+  variable "aws_region" {
+    type = string
+  
+}
+variable "project_name" {
+  description = "Project name"
+  type        = string
+}
+
+variable "environment" {
+  description = "Environment name"
+  type        = string
+}
+
+variable "vpc_cidr" {
+  description = "CIDR block for VPC"
+  type        = string
+}
+
+variable "public_subnets" {
+  description = "Public subnet configuration"
+
+  type = map(object({
+    cidr_block        = string
+    availability_zone = string
+    subnet_type       = string
+  }))
+}
+
+variable "private_subnets" {
+  description = "Private subnet configuration"
+
+  type = map(object({
+    cidr_block        = string
+    availability_zone = string
+    subnet_type       = string
+  }))
+}
+
+
+
+
+variable "ssh_cidr_blocks" {
+  description = "CIDR blocks allowed to SSH to EC2"
+  type        = list(string)
+
+  default = []
+}
+
+##lets create resource.tf copy from line 69 till 113
+  module "networking" {
+    #in source we will put our github link copy unit network remote httpd and /tree/main
+  source       = "github.com/gopal1409/terraform-module-sep-second-26/modules/networking"
+  project_name = "gopal-project"
+  environment  = "dev"
+  vpc_cidr     = "10.0.0.0/16"
+  public_subnets = {
+    subnet1 = {
+      cidr_block        = "10.0.1.0/24"
+      availability_zone = "us-east-1a"
+      subnet_type       = "public"
+    }
+    subnet2 = {
+      cidr_block        = "10.0.2.0/24"
+      availability_zone = "us-east-1b"
+      subnet_type       = "public"
+    }
+    subnet3 = {
+      cidr_block        = "10.0.3.0/24"
+      availability_zone = "us-east-1c"
+      subnet_type       = "public"
+    }
+  }
+
+  ######ths are private subnet
+  private_subnets = {
+    subnet4 = {
+      cidr_block        = "10.0.4.0/24"
+      availability_zone = "us-east-1a"
+      subnet_type       = "private"
+    }
+    subnet5 = {
+      cidr_block        = "10.0.5.0/24"
+      availability_zone = "us-east-1b"
+      subnet_type       = "private"
+    }
+    subnet6 = {
+      cidr_block        = "10.0.6.0/24"
+      availability_zone = "us-east-1c"
+      subnet_type       = "private"
+    }
+  }
+
+
+}
+
+#finally lets create output.tf copy from line 116 till 127
+  output "vpc_id" {
+  description = "VPC ID"
+  value       = module.networking.vpc_id
+}
+output "public_subnet_ids" {
+  description = "Public subnet IDs"
+  value       = module.networking.public_subnet_ids
+}
+output "private_subnet_ids" {
+  description = "Private subnet IDs"
+  value       = module.networking.private_subnet_ids
+}   
+
+#after that do 
+  terraform init
+  terraform plan
+  terraform apply
