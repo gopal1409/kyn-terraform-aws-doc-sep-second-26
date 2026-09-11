@@ -29,3 +29,170 @@ git add .
 git commit -m "terraform module"
 ###go to github click on the plus icon create a new reo terraform-module-sep
 ###in quick setup select ssh ##copy the push command this will upload the code to github
+
+2. Networking module
+modules/networking/variables.tf
+variable "project_name" {
+  description = "Project name"
+  type        = string
+}
+
+variable "environment" {
+  description = "Environment name"
+  type        = string
+}
+
+variable "vpc_cidr" {
+  description = "CIDR block for VPC"
+  type        = string
+}
+
+variable "public_subnets" {
+  description = "Public subnet configuration"
+
+  type = map(object({
+    cidr_block        = string
+    availability_zone = string
+    subnet_type       = string
+  }))
+}
+
+variable "private_subnets" {
+  description = "Private subnet configuration"
+
+  type = map(object({
+    cidr_block        = string
+    availability_zone = string
+    subnet_type       = string
+  }))
+}
+modules/networking/main.tf
+locals {
+  project_tags = {
+    Name        = "${var.project_name}-${var.environment}"
+    Project     = var.project_name
+    Environment = var.environment
+  }
+}
+
+# VPC
+resource "aws_vpc" "my_vpc" {
+  cidr_block = var.vpc_cidr
+
+  tags = merge(
+    local.project_tags,
+    {
+      Name = "${local.project_tags.Name}-vpc"
+    }
+  )
+}
+
+# Internet Gateway
+resource "aws_internet_gateway" "igw" {
+  vpc_id = aws_vpc.my_vpc.id
+
+  tags = {
+    Name = "${local.project_tags.Name}-igw"
+  }
+}
+
+# Public Subnets
+resource "aws_subnet" "web_subnet" {
+  for_each = var.public_subnets
+
+  vpc_id = aws_vpc.my_vpc.id
+
+  cidr_block        = each.value.cidr_block
+  availability_zone = each.value.availability_zone
+
+  # Web instances need public IPs
+  map_public_ip_on_launch = true
+
+  tags = {
+    Name       = "${local.project_tags.Name}-${each.key}"
+    SubnetType = each.value.subnet_type
+  }
+}
+
+# Private Subnets
+resource "aws_subnet" "db_subnet" {
+  for_each = var.private_subnets
+
+  vpc_id = aws_vpc.my_vpc.id
+
+  cidr_block        = each.value.cidr_block
+  availability_zone = each.value.availability_zone
+
+  tags = {
+    Name       = "${local.project_tags.Name}-${each.key}"
+    SubnetType = each.value.subnet_type
+  }
+}
+
+# Public Route Table
+resource "aws_route_table" "public_rtb" {
+  vpc_id = aws_vpc.my_vpc.id
+
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.igw.id
+  }
+
+  tags = {
+    Name = "${local.project_tags.Name}-public-rtb"
+  }
+}
+
+# Public Route Table Association
+resource "aws_route_table_association" "public_rtb_association" {
+  for_each = aws_subnet.web_subnet
+
+  subnet_id = each.value.id
+
+  route_table_id = aws_route_table.public_rtb.id
+}
+
+# Private Route Table
+resource "aws_route_table" "private_rtb" {
+  vpc_id = aws_vpc.my_vpc.id
+
+  tags = {
+    Name = "${local.project_tags.Name}-private-rtb"
+  }
+}
+
+# Private Route Table Association
+resource "aws_route_table_association" "private_rtb_association" {
+  for_each = aws_subnet.db_subnet
+
+  subnet_id = each.value.id
+
+  route_table_id = aws_route_table.private_rtb.id
+}
+
+modules/networking/outputs.tf
+output "vpc_id" {
+  description = "VPC ID"
+  value       = aws_vpc.my_vpc.id
+}
+
+output "public_subnet_ids" {
+  description = "Public subnet IDs"
+  value       = {
+    for key, subnet in aws_subnet.web_subnet :
+    key => subnet.id
+  }
+}
+
+output "private_subnet_ids" {
+  description = "Private subnet IDs"
+  value       = {
+    for key, subnet in aws_subnet.db_subnet :
+    key => subnet.id
+  }
+}
+
+output "internet_gateway_id" {
+  description = "Internet Gateway ID"
+  value       = aws_internet_gateway.igw.id
+}
