@@ -196,3 +196,8 @@ output "internet_gateway_id" {
   description = "Internet Gateway ID"
   value       = aws_internet_gateway.igw.id
 }
+
+#once add this 
+git add .
+git commit -m "added networking module"
+git push origin main
