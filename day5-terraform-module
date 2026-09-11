@@ -204,7 +204,7 @@ git push origin main
 
 
 3. Security Group module
-modules/security-group/variables.tf
+#inside modules/security-group/variables.tf add line 208 till 228
 variable "project_name" {
   description = "Project name"
   type        = string
@@ -226,7 +226,8 @@ variable "ssh_cidr_blocks" {
 
   default = []
 }
-modules/security-group/main.tf
+
+#inside modules/security-group/main.tf add line 231 till 352
 locals {
   project_tags = {
     Name        = "${var.project_name}-${var.environment}"
@@ -349,7 +350,7 @@ resource "aws_vpc_security_group_ingress_rule" "web_from_alb" {
 
   description = "HTTP from Application Load Balancer"
 }
-modules/security-group/outputs.tf
+#inside modules/security-group/outputs.tf add 354 till 362
 output "alb_security_group_id" {
   description = "ALB security group ID"
   value       = aws_security_group.alb_sg.id
@@ -359,3 +360,7 @@ output "web_security_group_id" {
   description = "Web server security group ID"
   value       = aws_security_group.web_sg.id
 }
+###then finally upload the code in github
+git add .
+git commit -m "added security group"
+git push origin main
