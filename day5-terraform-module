@@ -23,3 +23,9 @@
 │       ├── variables.tf
 │       └── outputs.tf
 │
+##once you created the module folder we need to upload the same in github open a new terminal
+git init
+git add .
+git commit -m "terraform module"
+###go to github click on the plus icon create a new folder terraform-module-sep
+###in quick setup select ssh ##copy the push command this will upload the code to github
