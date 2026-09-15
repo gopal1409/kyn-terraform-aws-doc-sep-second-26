@@ -1,4 +1,4 @@
-##create a new file subnet-object-varaibles.tf
+##create a new file subnet-object-varaibles.tf copy from line 2 till 29
   variable "public_subnet" { #student
   description = "subnet configuration"
   type = map(object({
