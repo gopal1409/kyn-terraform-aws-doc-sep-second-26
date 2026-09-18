@@ -1,0 +1,210 @@
+1. Directory structure
+terraform-project/
+│
+├── main.tf
+├── variables.tf
+├── outputs.tf
+├── providers.tf
+│
+└── modules/
+    └── networking/
+        ├── main.tf
+        ├── variables.tf
+        └── outputs.tf
+2. Module: modules/networking/main.tf
+resource "aws_vpc" "this" {
+  cidr_block = var.vpc_cidr
+
+  tags = {
+    Name = "${var.project_name}-vpc"
+  }
+}
+
+resource "aws_subnet" "this" {
+  for_each = var.subnets
+
+  vpc_id            = aws_vpc.this.id
+  cidr_block        = each.value.cidr_block
+  availability_zone = each.value.availability_zone
+
+  tags = {
+    Name = "${var.project_name}-${each.key}"
+  }
+}
+3. Module variables
+
+modules/networking/variables.tf
+
+variable "project_name" {
+  type = string
+}
+
+variable "vpc_cidr" {
+  type = string
+}
+
+variable "subnets" {
+  type = map(object({
+    cidr_block        = string
+    availability_zone = string
+  }))
+}
+4. Module outputs
+
+modules/networking/outputs.tf
+
+output "vpc_id" {
+  value = aws_vpc.this.id
+}
+
+output "subnet_ids" {
+  value = {
+    for key, subnet in aws_subnet.this :
+    key => subnet.id
+  }
+}
+5. Call the module
+
+Now your root main.tf can use the module:
+
+module "networking" {
+  source = "./modules/networking"
+
+  project_name = "gopal-project"
+
+  vpc_cidr = "10.0.0.0/16"
+
+  subnets = {
+    app_subnet = {
+      cidr_block        = "10.0.1.0/24"
+      availability_zone = "us-east-1a"
+    }
+
+    db_subnet = {
+      cidr_block        = "10.0.2.0/24"
+      availability_zone = "us-east-1b"
+    }
+  }
+}
+
+Then:
+
+terraform init
+terraform plan
+terraform apply
+Reuse the SAME module
+
+This is where Terraform modules become powerful.
+
+You can call the same module again:
+
+module "networking_dev" {
+  source = "./modules/networking"
+
+  project_name = "gopal-dev"
+
+  vpc_cidr = "10.10.0.0/16"
+
+  subnets = {
+    app = {
+      cidr_block        = "10.10.1.0/24"
+      availability_zone = "us-east-1a"
+    }
+
+    db = {
+      cidr_block        = "10.10.2.0/24"
+      availability_zone = "us-east-1b"
+    }
+  }
+}
+
+And again for production:
+
+module "networking_prod" {
+  source = "./modules/networking"
+
+  project_name = "gopal-prod"
+
+  vpc_cidr = "10.20.0.0/16"
+
+  subnets = {
+    app = {
+      cidr_block        = "10.20.1.0/24"
+      availability_zone = "us-east-1a"
+    }
+
+    db = {
+      cidr_block        = "10.20.2.0/24"
+      availability_zone = "us-east-1b"
+    }
+  }
+}
+
+The important point is:
+
+                ┌─────────────────────┐
+                │ networking module   │
+                │                     │
+                │ VPC                 │
+                │ Subnets             │
+                │ Route tables        │
+                │ Internet Gateway    │
+                └──────────┬──────────┘
+                           │
+             ┌─────────────┼──────────────┐
+             │             │              │
+             ▼             ▼              ▼
+          DEV          STAGING           PROD
+       10.10.0.0/16   10.15.0.0/16    10.20.0.0/16
+
+The code remains the same. Only the input variables change.
+
+Using a GitHub module
+
+Once you upload your module to GitHub, you don't need:
+
+source = "./modules/networking"
+
+You can use:
+
+module "networking" {
+  source = "git::https://github.com/gopal1409/terraform-aws-modules.git//modules/networking?ref=v1.0.0"
+
+  project_name = "gopal-project"
+
+  vpc_cidr = "10.0.0.0/16"
+
+  subnets = {
+    app = {
+      cidr_block        = "10.0.1.0/24"
+      availability_zone = "us-east-1a"
+    }
+
+    db = {
+      cidr_block        = "10.0.2.0/24"
+      availability_zone = "us-east-1b"
+    }
+  }
+}
+
+Then:
+
+terraform init
+terraform plan
+terraform apply
+
+Terraform downloads the module from GitHub.
+
+Version/tag it
+
+For example:
+
+v1.0.0
+v1.1.0
+v2.0.0
+
+Then:
+
+source = "git::https://github.com/gopal1409/terraform-aws-modules.git//modules/networking?ref=v1.0.0"
+
+This is particularly useful because your infrastructure code can consume a known version of the module rather than whatever happens to be on the GitHub main branch.
