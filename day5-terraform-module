@@ -364,3 +364,188 @@ output "web_security_group_id" {
 git add .
 git commit -m "added security group"
 git push origin main
+
+#inside modules/networking/variables.tf copy from line 369 till 417
+variable "aws_region" {
+  description = "this is the region "
+  type        = string
+
+}
+
+variable "aws_vpc_cidr" {
+  description = "cidr of vpc"
+  type        = string
+
+}
+
+variable "web_subnet" {
+  description = "web subnet cidr"
+  type        = string
+
+}
+
+variable "project_name" {
+  description = "name of the project"
+  type        = string
+
+}
+
+variable "environment" {
+  type    = string
+
+}
+
+variable "private_subnet" { #student
+  description = "privsate subnet configuration"
+  type = map(object({
+    cidr_block        = string #age
+    availability_zone = string #mar4xobtain
+    subnet_type       = string #subject
+
+  }))
+}
+
+variable "public_subnet" { #student
+  description = "subnet configuration"
+  type = map(object({
+    cidr_block        = string #age
+    availability_zone = string #mar4xobtain
+    subnet_type       = string #subject
+
+  }))
+ 
+}
+
+#inside modules/networking/output.tf copy from line 420 till 450
+output "vpc_id" {
+  description = "id of the vpc"
+  value       = aws_vpc.web_vpc.id
+}
+
+output "internet_gateway_id" {
+  description = "internet gateway id"
+  value       = aws_internet_gateway.igw.id
+}
+
+output "private_route_table" {
+  description = "private route table"
+  value       = aws_route_table.custom_rtb.id
+}
+#we want to output the subnet
+output "public_subnet" {
+  description = "ids of all public subnet"
+  value = {
+    for name, subnet in aws_subnet.web_subnet :
+    name => {
+      id                = subnet.id
+      cidr_block        = subnet.cidr_block
+      availability_zone = subnet.availability_zone
+    }
+  }
+}
+
+output "public_subnet1" {
+  description = "ids of all public subnet"
+  value       = aws_subnet.web_subnet["subnet1"].id
+}
+
+#inside modules/networking/main.tf copy from line 420 till 450
+
+locals {
+  #when you want to concatinate multiple values together
+  name_prefix = "${var.project_name}-${var.environment}"
+  #gopal-project-dev
+  #you can use local block for named expression
+  project_tags = {
+    Name        = local.name_prefix
+    Environment = var.environment
+    Project     = var.project_name
+    Managedby   = "Terraform"
+  }
+}
+
+resource "aws_vpc" "web_vpc" {
+  #using terraform we are create a resources
+  #when i create a resource 
+  #aws_vpc is the name of the resources which we are creating
+  #this is an refrence block user define used in terraform.tfsate file
+  cidr_block = var.aws_vpc_cidr
+  tags       = local.project_tags
+}
+
+#lets add the internet gw
+resource "aws_internet_gateway" "igw" {
+  vpc_id = aws_vpc.web_vpc.id
+
+  tags = {
+    Name = "${local.name_prefix}-igw"
+  }
+}
+
+#public subnet and private subnet
+resource "aws_subnet" "db_subnet" {
+  for_each = var.private_subnet #this will get the whole dic subnet1,subnet2,subnet3
+  #intialzed with subnet1 ,start with second subnet
+  vpc_id = aws_vpc.web_vpc.id #chosse the vpc
+  #how to map the vpc id
+  cidr_block        = each.value.cidr_block        #subnet1 cidr block 10.0.1.0/24
+  availability_zone = each.value.availability_zone #us-east-1a
+  tags = {
+    Name = "${local.name_prefix}-${each.key}"
+    Type = each.value.subnet_type
+  }
+}
+#the scenario is duplicay
+
+variable "public_subnet" { #student
+  description = "subnet configuration"
+  type = map(object({
+    cidr_block        = string #age
+    availability_zone = string #mar4xobtain
+    subnet_type       = string #subject
+
+  }))
+  default = {
+    "subnet1" = {                       #student1
+      cidr_block        = "10.0.1.0/24" #instance size
+      availability_zone = "us-east-1a"  #az
+      subnet_type       = "public"      #subnet1
+    }
+    "subnet2" = {
+      cidr_block        = "10.0.2.0/24"
+      availability_zone = "us-east-1b"
+      subnet_type       = "public"
+    }
+    "subnet3" = {
+      cidr_block        = "10.0.3.0/24"
+      availability_zone = "us-east-1c"
+      subnet_type       = "public"
+    }
+
+  }
+}
+
+#public rtb and assoication
+resource "aws_route_table" "custom_rtb" {
+  vpc_id = aws_vpc.web_vpc.id
+
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.igw.id
+  }
+
+
+
+  tags = {
+    Name = "${local.name_prefix}-custom-rtb"
+  }
+}
+
+#all the public subnet need to assoicate with the custom rtb
+resource "aws_route_table_association" "custom_rtb_associate" {
+  for_each       = aws_subnet.web_subnet
+  subnet_id      = each.value.id
+  route_table_id = aws_route_table.custom_rtb.id
+}
+
+
